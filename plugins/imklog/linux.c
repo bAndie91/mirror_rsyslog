@@ -220,8 +220,52 @@ static void LogLine(char *ptr, int len)
     auto   int delta = 0;              /* number of chars copied        */
     auto   int symbols_expanded = 0;   /* 1 if symbols were expanded */
     auto   int skip_symbol_lookup = 0; /* skip symbol lookup on this pass */
-    auto   char *save_ptr = ptr;       /* save start of input line */
-    auto   int save_len = len;         /* save length at start of input line */
+    auto   char *save_ptr;             /* save start of input line */
+    auto   int save_len;               /* save length at start of input line */
+
+	/* Strip timestamp */
+	if(!bKeepTimestamp)
+	{
+		int pos = 0;
+		int tspos;
+		#define CHECK_OVERRUN do{ if(pos >= len) goto end_TimeStampStripping; }while(0)
+		if(ptr[pos] == '<')
+		{
+			pos++;
+			while(ptr[pos] >= '0' && ptr[pos] <= '9') pos++;
+			CHECK_OVERRUN;
+			if(ptr[pos] == '>') pos++; else goto end_TimeStampStripping;
+		}
+		if(ptr[pos] == '[')
+		{
+			tspos = pos;
+			pos++;
+			CHECK_OVERRUN;
+			while(ptr[pos] == ' ') pos++;
+			CHECK_OVERRUN;
+			while(ptr[pos] >= '0' && ptr[pos] <= '9') pos++;
+			if(pos <= 1) goto end_TimeStampStripping;
+			CHECK_OVERRUN;
+			if(ptr[pos] == '.') pos++; else goto end_TimeStampStripping;
+			CHECK_OVERRUN;
+			while(ptr[pos] >= '0' && ptr[pos] <= '9') pos++;
+			CHECK_OVERRUN;
+			if(ptr[pos] == ']') pos++; else goto end_TimeStampStripping;
+			CHECK_OVERRUN;
+			if(ptr[pos] == ' ') pos++;
+			
+			len = len-(pos-tspos);
+			int i;
+			for(i = tspos; i<=len; i++)
+			{
+				ptr[i] = ptr[i+pos-tspos];
+			}
+		}
+	}
+	end_TimeStampStripping:
+
+	save_ptr = ptr;
+	save_len = len;
 
     while( len > 0 )
     {
