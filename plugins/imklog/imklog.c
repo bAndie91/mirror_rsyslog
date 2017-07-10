@@ -70,6 +70,7 @@ int dbgPrintSymbols = 0; /* this one is extern so the helpers can access it! */
 int symbols_twice = 0;
 int use_syscall = 0;
 int symbol_lookup = 0; /* on recent kernels > 2.6, the kernel does this */
+int bKeepTimestamp = 1;
 int bPermitNonKernel = 0; /* permit logging of messages not having LOG_KERN facility */
 int iFacilIntMsg; /* the facility to use for internal messages (set by driver) */
 uchar *pszPath = NULL;
@@ -278,6 +279,7 @@ static rsRetVal resetConfigVariables(uchar __attribute__((unused)) *pp, void __a
 	symfile = NULL;
 	symbol_lookup = 0;
 	bPermitNonKernel = 0;
+	bKeepTimestamp = 1;
 	if(pszPath != NULL) {
 		free(pszPath);
 		pszPath = NULL;
@@ -304,6 +306,7 @@ CODEmodInit_QueryRegCFSLineHdlr
 	CHKiRet(omsdRegCFSLineHdlr((uchar *)"klogpermitnonkernelfacility", 0, eCmdHdlrBinary, NULL, &bPermitNonKernel, STD_LOADABLE_MODULE_ID));
 	CHKiRet(omsdRegCFSLineHdlr((uchar *)"klogconsoleloglevel", 0, eCmdHdlrInt, NULL, &console_log_level, STD_LOADABLE_MODULE_ID));
 	CHKiRet(omsdRegCFSLineHdlr((uchar *)"kloginternalmsgfacility", 0, eCmdHdlrFacility, NULL, &iFacilIntMsg, STD_LOADABLE_MODULE_ID));
+	CHKiRet(omsdRegCFSLineHdlr((uchar *)"klogkeeptimestamp", 0, eCmdHdlrBinary, NULL, &bKeepTimestamp, STD_LOADABLE_MODULE_ID));
 	CHKiRet(omsdRegCFSLineHdlr((uchar *)"resetconfigvariables", 1, eCmdHdlrCustomHandler, resetConfigVariables, NULL, STD_LOADABLE_MODULE_ID));
 ENDmodInit
 /* vim:set ai:
