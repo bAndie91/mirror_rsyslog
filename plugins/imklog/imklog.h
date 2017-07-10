@@ -48,6 +48,7 @@ int klogFacilIntMsg(void);
 extern int symbols_twice;
 extern int use_syscall;
 extern int symbol_lookup;
+extern int bKeepTimestamp;
 extern char *symfile; 
 extern int console_log_level;
 extern int dbgPrintSymbols;
