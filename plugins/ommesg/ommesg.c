@@ -309,7 +309,7 @@ CODE_STD_STRING_REQUESTparseSelectorAct(1)
 		/* done, on to the template
 		 * TODO: we need to handle the case where i >= MAXUNAME!
 		 */
-		if((iRet = cflineParseTemplateName(&p, *ppOMSR, 0, OMSR_NO_RQD_TPL_OPTS, (uchar*)" StdMesgFmt"))
+		if((iRet = cflineParseTemplateName(&p, *ppOMSR, 0, OMSR_NO_RQD_TPL_OPTS, (uchar*)" StdUsrMsgFmt"))
 			!= RS_RET_OK)
 			goto finalize_it;
 	}
